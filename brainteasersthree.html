@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beginning Brainteaser</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <style>
+        pre {
+            white-space: pre-wrap;
+        }
+
+        .highlight {
+            background-color: black;
+            color: white;
+            font-weight: strong;
+            font-size: 110%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="section">
+                <h5 class="center-align" style="font-weight: bold;">XPath Brainteaser</h5>
+            </div>
+        </div>
+    <div class="row">
+        <div class="col s12"><strong>Beginning Conditionals 2: </strong>Get the link for all Fords with the year greater then 1950.</div>
+        <br/>
+        <div class="section">
+            <div class="col s6">
+                <textarea disabled style="height: 624px;" id="htmlCode">
+                    <div>
+                        <a href="/cars/102392-2">Link</a>
+                        <span class="make">Chevrolet</span><br>
+                        <span class="year">1956</span><br>
+                        <span class="price">$20,000</span><br>
+                      </div>
+                    
+                      <div>
+                        <a href="/cars/152933-11">Link</a>
+                        <span class="make">Ford</span><br>
+                        <span class="year">1958</span><br>
+                        <span class="price">$21,000</span><br>
+                      </div>
+                    
+                       <div>
+                        <a href="/cars/102234-10">Link</a>
+                        <span class="make">BMW</span><br>
+                        <span class="year">2015</span><br>
+                        <span class="price">$25,000</span><br>
+                      </div>
+                    
+                      <div>
+                        <a href="/cars/102234-10">Link</a>
+                        <span class="make">GM</span><br>
+                        <span class="year">1957</span><br>
+                        <span class="price">$25,000</span><br>
+                      </div>
+                    
+                    <div>
+                        <a href="/cars/102234-10">Link</a>
+                        <span class="make">Ford</span><br>
+                        <span class="year">1937</span><br>
+                        <span class="price">$5,000</span><br>
+                      </div>
+                    
+                      <div>
+                        <a href="/cars/102392-2">Link</a>
+                        <span class="make">Ford</span><br>
+                        <span class="year">1949</span><br>
+                        <span class="price">$15,000</span><br>
+                      </div>
+                      <div>
+                        <a href="/cars/102444-18">Link</a>
+                        <span class="make">Ford</span><br>
+                        <span class="year">1960</span><br>
+                        <span class="price">$30,000</span><br>
+                      </div> 
+                </textarea>
+            </div>
+            <div class="col s6">
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input type="text" id="xpathInput" placeholder="e.g., //div[@class='example']">
+                                <label for="answer">Guess your answer</label>
+                                <span class="helper-text">Your answer</span>
+                            </div>
+                            <button class="btn waves-effect waves-light" onclick="viewResult()" type="button">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+
+                            <h4 id="answer">Result:</h4>
+                            <textarea style="height: 370px;" id="result" disabled></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        $(".dropdown-trigger").dropdown();
+
+        function viewResult() {
+            try{
+                var xpath = $('#xpathInput').val();
+                var htmlCode = $('#htmlCode').val();
+                // Create a temporary div element
+                var tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlCode;
+
+                var result = document.evaluate(xpath, tempDiv, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                // Iterate through the result snapshot and do something with each node
+                var stringResult = "";
+                for (var i = 0; i < result.snapshotLength; i++) {
+                    var node = result.snapshotItem(i);
+                    console.log(node); // Or do something else with each node
+                    stringResult += node.outerHTML;
+                    if (i + 1 != result.snapshotLength) {
+                        stringResult += '\n';
+                    }
+                }
+                document.getElementById("result").textContent = stringResult;
+                console.log(stringResult);
+
+                let expectedString = '<a href="/cars/152933-11">Link</a>\n<a href="/cars/102444-18">Link</a>';
+
+                if (stringResult === expectedString) {
+                    document.getElementById("answer").innerHTML = "Result: <span style='color: #00c853;'>Correct</span>";
+                } else {
+                    document.getElementById("answer").innerHTML = "Result: <span style='color: #ff3d00;'>Incorrect</span>";
+                }
+            }
+            catch{
+                document.getElementById("result").textContent = "";
+                document.getElementById("answer").innerHTML = "Result: <span style='color: #ff3d00;'>Incorrect</span>";
+            }
+        }
+    </script>
+</body>
+
+</html>

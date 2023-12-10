@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beginning Brainteaser</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <style>
+        pre {
+            white-space: pre-wrap;
+        }
+
+        .highlight {
+            background-color: black;
+            color: white;
+            font-weight: strong;
+            font-size: 110%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="section">
+                <h5 class="center-align" style="font-weight: bold;">XPath Brainteaser</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12"><strong>1. Nested Selectors: </strong>Find the list items for all the irritating things
+                in September.</div>
+            <br />
+
+            <div class="section">
+                <div class="col s6">
+                    <textarea disabled style="height: 624px;" id="htmlCode">
+            <div>
+                <div class="august">
+                    <div class="soothing">
+                        <ul>
+                            <li>Golden Retrievers</li>
+                            <li>Chocolate</li>
+                        </ul>
+                    </div>
+                    <div class="irritating">
+                        <ul>
+                            <li>Loud barking dogs late at night</li>
+                            <li>People who don't know how to recycle</li>
+                            <li>Teenagers who don't get off my lawn</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="september">
+                    <div class="soothing">
+                        <ul>
+                            <li>Home-cooked emails</li>
+                            <li>Youtube cat videos</li>
+                            <li>TV Series: "Mayonaise, The Staple of Russian Cooking"</li>
+                        </ul>
+                    </div>
+                    <div class="irritating">
+                        <ul>
+                            <li>Yorkies</li>
+                            <li>Loud Cooks</li>
+                            <li>Belligerent Internet commentators</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </textarea>
+                </div>
+                <div class="col s6">
+                    <div class="row">
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input type="text" id="xpathInput" placeholder="e.g., //div[@class='example']">
+                                    <label for="answer">Guess your answer</label>
+                                    <span class="helper-text">Your answer</span>
+                                </div>
+                                <button class="btn waves-effect waves-light" type="button" onclick="viewResult()">Submit
+                                    <i class="material-icons right">send</i>
+                                </button>
+
+                                <h4 id="answer">Result:</h4>
+                                <textarea style="height: 370px;" id="result" disabled></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(".dropdown-trigger").dropdown();
+
+        function viewResult() {
+            try {
+                var xpath = $('#xpathInput').val();
+                var htmlCode = $('#htmlCode').val();
+                // Create a temporary div element
+                var tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlCode;
+                var result = document.evaluate(xpath, tempDiv, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                // Iterate through the result snapshot and do something with each node
+                var stringResult = "";
+                for (var i = 0; i < result.snapshotLength; i++) {
+                    var node = result.snapshotItem(i);
+                    console.log(node); // Or do something else with each node
+                    stringResult += node.outerHTML;
+                    if (i + 1 != result.snapshotLength) {
+                        stringResult += '\n';
+                    }
+                }
+                document.getElementById("result").textContent = stringResult;
+                console.log(stringResult);
+
+                let expectedString = "<li>Yorkies</li>\n<li>Loud Cooks</li>\n<li>Belligerent Internet commentators</li>";
+
+                let cleanExpectedString = expectedString.replace(/\s+/g, ' ').replace(/\r?\n/g, '\n').trim();
+                let cleanStringResult = stringResult.replace(/\s+/g, ' ').replace(/\r?\n/g, '\n').trim();
+
+                if (cleanStringResult === cleanExpectedString) {
+                    document.getElementById("answer").innerHTML = "Result: <span style='color: #00c853;'>Correct</span>";
+                } else {
+                    if (cleanStringResult.includes(cleanExpectedString)) {
+                        document.getElementById("answer").innerHTML = "Result: <span style='color: #ff8f00;'>You're almost there</span>";
+                    } else {
+                        document.getElementById("answer").innerHTML = "Result: <span style='color: #ff3d00;'>Incorrect</span>";
+                    }
+                }
+            }
+            catch (error) {
+                document.getElementById("result").textContent = "";
+                document.getElementById("answer").innerHTML = "Result: <span style='color: #ff3d00;'>Incorrect</span>";
+            }
+        }
+    </script>
+</body>
+
+</html>

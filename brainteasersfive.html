@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beginning Brainteaser</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <style>
+        pre {
+            white-space: pre-wrap;
+        }
+
+        .highlight {
+            background-color: black;
+            color: white;
+            font-weight: strong;
+            font-size: 110%;
+        }
+    </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+        <div class="section">
+            <h5 class="center-align" style="font-weight: bold;">XPath Brainteaser</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12"><strong>Find number of patients: </strong>Number of patients admitted to "Good Health Clinic"</div>
+        <br/>
+        <div class="section">
+            <div class="col s6">
+                <textarea disabled style="height: 624px;" id="htmlCode">
+                    <patients>
+                        <patientrole>
+                          <id extension="996-756-495" root="2.16.840.1.113883.19.5">
+                          <id extension="775-756-495" root="2.16.840.1.113883.14.6">
+                          <patient>
+                            <name>
+                              <given>Henry</given>
+                              <family>Levin</family>
+                            </name>
+                            <administrativegendercode code="M" codesystem="2.16.840.1.113883.5.1">
+                            <birthtime value="19320924">
+                          </birthtime></administrativegendercode></patient>
+                          <providerorganization>
+                            <id root="2.16.840.1.113883.19.5">
+                            <name>Good Health Clinic</name>
+                          </id></providerorganization>
+                          <admissiontime value="2012030111:32">
+                        </admissiontime></id></id></patientrole>
+                        <patientrole>
+                          <id extension="65" root="2.16.840.1.113883.3.933">
+                          <patient>
+                            <name>
+                              <given>Paul</given>
+                              <family>Pappel</family>
+                            </name>
+                            <administrativegendercode code="M" codesystem="2.16.840.1.113883.5.1">
+                            <birthtime value="19551217">
+                          </birthtime></administrativegendercode></patient>
+                          <providerorganization>
+                            <id extension="84756-11241-283-OPTD-3322" root="1.2.3.4.5.6.1.8.9.0">
+                            <name> Dr.med. Hans Topp-Glucklich</name>
+                          </id></providerorganization>
+                          <admissiontime value="201201152200">
+                        </admissiontime></id></patientrole>
+                        <patientrole>
+                          <id extension="800001" root="2.16.840.1.113883.19.5">
+                          <patient>
+                            <name>
+                              <given>JEANNE</given>
+                              <family>PETIT</family>
+                            </name>
+                            <administrativegendercode code="F" codesystem="2.16.840.1.113883.5.1">
+                            <birthtime value="19480105">
+                          </birthtime></administrativegendercode></patient>
+                          <providerorganization>
+                            <id root="2.16.840.1.113883.19.5">
+                            <name>Good Health Clinic</name>
+                          </id></providerorganization>
+                          <admissiontime value="20120101T22:00">
+                        </admissiontime></id></patientrole>
+                      </patients>
+                </textarea>
+            </div>
+            <div class="col s6">
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input type="text" id="xpathInput" placeholder="e.g., //div[@class='example']">
+                                <label for="answer">Guess your answer</label>
+                                <span class="helper-text">Your answer</span>
+                            </div>
+                            <button class="btn waves-effect waves-light" type="button" onclick="viewResult()">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+
+                            <h4 id="answer">Result:</h4>
+                            <textarea style="height: 370px;" id="result" disabled></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+    <script>
+        $(".dropdown-trigger").dropdown();
+
+        function viewResult() {
+            try{
+                var xpath = $('#xpathInput').val();
+                var htmlCode = $('#htmlCode').val();
+                
+                // Create a temporary div element
+                var tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlCode;
+                
+                console.log(xpath);
+                var result = document.evaluate(xpath, tempDiv, null, XPathResult.NUMBER_TYPE, null);
+                //console.log(result);
+                // Get the count of matched elements
+                var count = result.numberValue;
+                console.log(count);
+
+                if (count === 2){
+                    document.getElementById("result").textContent = count;
+                    document.getElementById("answer").innerHTML = "Result: <span style='color: #00c853;'>Correct</span>";
+                }
+                else{
+                    document.getElementById("result").textContent = count;
+                    document.getElementById("answer").innerHTML = "Result: <span style='color: #ff3d00;'>Incorrect</span>";
+                }
+            }
+            catch(exception){
+                console.log(exception);
+                document.getElementById("answer").innerHTML = "Result: <span style='color: #ff3d00;'>Incorrect</span>";
+            }
+        }
+    </script>
+</body>
+
+</html>
