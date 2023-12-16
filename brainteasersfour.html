@@ -77,7 +77,9 @@
                             <button class="btn waves-effect waves-light" type="button" onclick="viewResult()">Submit
                                 <i class="material-icons right">send</i>
                             </button>
-
+                            <button class="btn waves-effect waves-light" type="button" onclick="displayAnswer()">Show Answer
+                                <i class="material-icons right">play_arrow</i>
+                            </button>
                             <h4 id="answer">Result:</h4>
                             <textarea style="height: 370px;" id="result" disabled></textarea>
                         </div>
@@ -123,6 +125,10 @@
                 document.getElementById("result").textContent = "";
                 document.getElementById("answer").innerHTML = "Result: <span style='color: #ff3d00;'>Incorrect</span>";
             }
+        }
+        function displayAnswer() {
+            var stringResult = "//div[./span[text()='Ford']][./span[@class='year' and text() =1958]]/a\n//span[text()='Ford']//following-sibling::span[text()='1958']//preceding-sibling::a";
+            document.getElementById("result").textContent = stringResult;
         }
     </script>
 </body>

@@ -101,7 +101,9 @@
                             <button class="btn waves-effect waves-light" onclick="viewResult()" type="button">Submit
                                 <i class="material-icons right">send</i>
                             </button>
-
+                            <button class="btn waves-effect waves-light" type="button" onclick="displayAnswer()">Show Answer
+                              <i class="material-icons right">play_arrow</i>
+                            </button>
                             <h4 id="answer">Result:</h4>
                             <textarea style="height: 370px;" id="result" disabled></textarea>
                         </div>
@@ -139,6 +141,10 @@
                 document.getElementById("result").textContent = "";
                 document.getElementById("answer").innerHTML = "Result: <span style='color: #ff3d00;'>Incorrect</span>";
             }
+        }
+        function displayAnswer() {
+            var stringResult = "//patient[.//birthtime[@value='19551217']]//family";
+            document.getElementById("result").textContent = stringResult;
         }
     </script>
 </body>
